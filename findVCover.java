@@ -19,6 +19,8 @@ public class findVCover {
     private int minCoverSize;
     private String fileName;
 
+    public ArrayList<Integer> getMinCover() { return this.minCover;}
+
     public static void main(String[] args) {
         String fileName;
         /* processing command line args */
