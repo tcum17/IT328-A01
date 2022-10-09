@@ -50,6 +50,7 @@ public class VertexCover {
      * Fills the cover so all nodes are included in it
      */
     public void fillCover() {
+        cover.clear();
         for (int i = 0; i < g.getNumVertices(); i++) {
             this.cover.add(i);
         }
