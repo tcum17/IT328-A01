@@ -42,6 +42,7 @@ public class findVCover {
         this.minCover = new ArrayList<>();
     }
 
+    public ArrayList<Integer> getMinCover(){ return minCover;}
     /**
      * Reads in a file of graphs
      * 
