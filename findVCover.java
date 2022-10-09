@@ -23,7 +23,7 @@ public class findVCover {
         String fileName;
         /* processing command line args */
         if (args.length == 0) {
-            fileName = "testGraph2.txt";
+            fileName = "graph.txt";
         } else {
             fileName = args[0];
         }
@@ -96,6 +96,7 @@ public class findVCover {
                     g.getNumEdges(), cover.size(), elapsedTime);
             printVertexCover(cover);
         }
+        
     }
 
     /**
@@ -142,6 +143,12 @@ public class findVCover {
         }
     }
     
+    
+    public ArrayList<Integer> findKvertexCover(VertexCover vc, int k){
+        minCover = new ArrayList<>(vc.getCover());
+        findKvertexCoverRecursive(vc, k);
+        return this.getMinCover();
+    }
     /**
      * Recursive function that attempts to search for a k vertex cover
      * 
@@ -150,7 +157,7 @@ public class findVCover {
      *           The minimum vertex cover (that was found) will be stored at
      *           this.minCover
      */
-    public void findKvertexCover(VertexCover vc, int k) {
+    public void findKvertexCoverRecursive(VertexCover vc, int k) {
         /* base case */
         if (this.minCover.size() <= k) {
             return;
