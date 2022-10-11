@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class CNF {
     private ArrayList<Graph> graphs;
     ArrayList<ArrayList<Integer>> neighbors;
+    int cnfCount = 1;
 
     public static void main(String[] args) {
         String fileName;
@@ -56,26 +57,26 @@ public class CNF {
                     graph.addEdge(row,row);
                     if (row % 2 == 0) {
                         graph.addEdge(row, row+1);
-                        Node node = new Node(0, false, false, "a" + label);
+                        Node node = new Node(label, false, false, "a" + label);
                         nodes.add(node);
                     } else {
                         graph.addEdge(row - 1, row);
-                        Node node = new Node(0, false, true, "-a" + label);
+                        Node node = new Node(-label, false, true, "-a" + label);
                         nodes.add(node);
                         label++;
                     }
                     
                 }
 
-                // Filling node array
+                // Filling the clauses of the node array
                 for (int j = 0; j < cnf3.length; j++) {
                     boolean sign;
                     if (cnf3[j] < 0) {
                         sign = false;
-                        nodes.add(new Node(0, true, sign, "-a" + Math.abs(cnf3[j])));
+                        nodes.add(new Node(cnf3[j], true, sign, "-a" + Math.abs(cnf3[j])));
                     } else {
                         sign = true;
-                        nodes.add(new Node(0, true, sign, "a" + Math.abs(cnf3[j])));
+                        nodes.add(new Node(cnf3[j], true, sign, "a" + Math.abs(cnf3[j])));
                     }
                     
                 }
@@ -86,7 +87,6 @@ public class CNF {
                 //Adding clauses
                 int count = 1;
                 for(int row = 2*numberOfVariables; row < numVertices; row++) {
-                    graph.addEdge(row,row);
                     if(count == 1) {
                         graph.addEdge(row, row+1);
                         graph.addEdge(row, row+2);
@@ -153,14 +153,34 @@ public class CNF {
                 // for (int i = 0; i < testGraphs.length; i++) {
                 //     System.out.println(testGraphs[i].toString());
                 // }
+
+                //System.out.println(graph.toString());
                 int k = this.getK(cnf3.length / 3, numberOfVariables);
-                //graph.generateAdjList();
+                graph.generateAdjList();
                 VertexCover cover = new VertexCover(graph);
                 findVCover findCover = new findVCover();
                 findCover.findKvertexCover(cover, k);
-                printVertexCover(findCover.getMinCover());
+                //printVertexCover(findCover.getMinCover());
+
+                // Create the correct ouput format
+                if(findCover.getMinCover().size() > 0) {
+                     System.out.print("3CNF No. " + cnfCount + ": [n="
+                    + numberOfVariables +" k=" + cnf3.length / 3 + "] (0 ms) Solution:["
+                    );
+                    for(int l = 0; l < numberOfVariables; l++) {
+                        int value = nodes.get(findCover.getMinCover().get(l)).value;
+                        if (value > 0) {
+                            System.out.print(value + ":T ");
+                        } else {
+                            System.out.print(Math.abs(value) + ":F ");
+                        }
+                    }
+                    System.out.println("]");
+                } else {
+                    System.out.println("NO SOLUTION");
+                }
+                cnfCount++;
                 
-                //System.out.println(graph.toString());
 
                 
             }
