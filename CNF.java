@@ -87,20 +87,20 @@ public class CNF {
                 int count = 1;
                 for(int row = 2*numberOfVariables; row < numVertices; row++) {
                     graph.addEdge(row,row);
-                    // if(count == 1) {
-                    //     graph.addEdge(row, row+1);
-                    //     graph.addEdge(row, row+2);
-                    // } else if (count == 2) {
-                    //     graph.addEdge(row, row+1);
-                    //     graph.addEdge(row, row-1);
-                    // } else if (count == 3) {
-                    //     graph.addEdge(row, row-1);
-                    //     graph.addEdge(row, row-2);
-                    // }
-                    // count++;
-                    // if(count > 3) {
-                    //     count = 1;
-                    // }
+                    if(count == 1) {
+                        graph.addEdge(row, row+1);
+                        graph.addEdge(row, row+2);
+                    } else if (count == 2) {
+                        graph.addEdge(row, row+1);
+                        graph.addEdge(row, row-1);
+                    } else if (count == 3) {
+                        graph.addEdge(row, row-1);
+                        graph.addEdge(row, row-2);
+                    }
+                    count++;
+                    if(count > 3) {
+                        count = 1;
+                    }
                 }
                 
                 //Add the edges between the verticies and the gadgets
@@ -112,15 +112,55 @@ public class CNF {
                     }
                 }
 
+                // Fill all the graphs to test
+                // Graph[] testGraphs = new Graph[(int) Math.pow(2, numberOfVariables)];
+                // for(int i = 0; i < (int) Math.pow(2, numberOfVariables); i++) {
+                //     Graph temp = new Graph(numVertices);
+                //     for(int x = 0; x < numVertices; x++) {
+                //         for(int y = 0; y < numVertices; y++) {
+                //             temp.getAdjMatrix()[x][y] = graph.getAdjMatrix()[x][y];
+                //         }
+                //     }
+                //     testGraphs[i] = temp;
+                // }
+
+                // int pair = 1;
+                // for(int i = 0; i < (int) Math.pow(2, numberOfVariables); i++) {
+                //     if(i % 2 == 0) {
+                //         Graph temp = new Graph(numVertices);
+                //         temp = testGraphs[i];
+                //         if (pair == 1) {
+                //             for (int column = 2*numberOfVariables; column < numVertices; column++) {  
+                //                 temp.removeEdge(i+1, column);
+                //                 temp.removeEdge(column, i+1);
+                //                 temp.removeEdge(i+3, column);
+                //                 temp.removeEdge(column, i+3);
+                //             }
+                //             testGraphs[i] = temp;
+                //             pair++;
+                //         }
+                //     } else {
+                //         Graph temp = new Graph(numVertices);
+                //         temp = testGraphs[i];
+                //         for (int column = 2*numberOfVariables; column < numVertices; column++) {  
+                //             temp.removeEdge(i-1, column);
+                //             temp.removeEdge(column, i-1);
+                //         }
+                //         testGraphs[i] = temp;
+                //     }
+                // }
+
+                // for (int i = 0; i < testGraphs.length; i++) {
+                //     System.out.println(testGraphs[i].toString());
+                // }
                 int k = this.getK(cnf3.length / 3, numberOfVariables);
+                //graph.generateAdjList();
                 VertexCover cover = new VertexCover(graph);
                 findVCover findCover = new findVCover();
                 findCover.findKvertexCover(cover, k);
                 printVertexCover(findCover.getMinCover());
                 
-
-                
-                System.out.println(graph.toString());
+                //System.out.println(graph.toString());
 
                 
             }

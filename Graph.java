@@ -45,6 +45,19 @@ public class Graph{
         }
     }
 
+    public void removeEdge(int u, int v){
+        /* same vertex so not incrementing number of edges */
+        if(u==v){
+            this.adjMatrix[u][u] = false;
+        }
+
+        if(u<v){
+            this.adjMatrix[u][v] = false;
+            this.adjMatrix[v][u] = false; // undirected graph
+            this.numEdges--;
+        }
+    }
+
     @Override
     public String toString(){
         String retVal = Integer.toString(numVertices) + "\n";
