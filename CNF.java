@@ -155,10 +155,10 @@ public class CNF {
                 // }
                 int k = this.getK(cnf3.length / 3, numberOfVariables);
                 //graph.generateAdjList();
-                VertexCover cover = new VertexCover(graph);
+                // VertexCover cover = new VertexCover(graph);
                 findVCover findCover = new findVCover();
-                findCover.findKvertexCover(cover, k);
-                printVertexCover(findCover.getMinCover());
+                ArrayList<Integer> min = findCover.findKvertexCover(graph, k);
+                printVertexCover(min);
                 
                 //System.out.println(graph.toString());
 

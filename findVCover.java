@@ -5,7 +5,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * Reads in graphs from a text file and finds the minimum vertex cover for each
@@ -92,18 +91,26 @@ public class findVCover {
 
     }
 
+    /**
+     * Finds the minimum vertex cover by setting up the initial states and calling the recursive function on them.
+     * Once the cover is found using the recursive function it creates an array list with the vertices that are in the cover
+     * @param g Graph to find the minimum vertex cover of
+     * @return  Array List with the vertices that are in the cover
+     */
     public ArrayList<Integer> findMinVertexCover(Graph g) {
         minCover = new boolean[g.getNumVertices()];
         boolean[] cover = new boolean[g.getNumVertices()];
         minCoverSize = g.getNumVertices();
         Arrays.fill(minCover, true);
         
+        /* setting up the initial states */
         for(int i=0;i<cover.length;i++){
             Arrays.fill(cover, true);
             findMinVertexCoverRecursive(g, cover, i);
         }
     
 
+        /* setting up the array list for our output */
         ArrayList<Integer> arrayListCover = new ArrayList<>();
         for (int i = 0; i < minCover.length; i++) {
             if (minCover[i]) {
@@ -113,6 +120,18 @@ public class findVCover {
         return arrayListCover;
     }
 
+    /**
+     * Recursive driver function that finds the minimum vertex cover.
+     * Works be first checking if the vertex would an uncovered edge. 
+     * If this vertex would NOT add an uncovered edge we would began exploring the decesions with trying to remove each ones of it's children
+     * 
+     * For example, we'd remove vertex 0 from the cover. Check if we can remove 1 from this updated cover, and explore this state more. 
+     * Instead, of removing 1 check if we can remove 2 from this updated cover, and explore this state more. And so on.
+     * 
+     * @param g         Graph that the vertex cover is based on 
+     * @param cover     Current state of the vertex cover
+     * @param vertex    Vertex we are considering removing from the cover
+     */
     private void findMinVertexCoverRecursive(Graph g, boolean[] cover, int vertex) {
         if (wouldAddUncoveredEdge(g, cover, vertex)) { // base case 2
             cover[vertex] = true; // need to add it back, it's a covered edge
@@ -134,11 +153,12 @@ public class findVCover {
     }
 
     /**
-     * 
-     * @param g
-     * @param cover
-     * @param vertex
-     * @return
+     * Determines if removing a vertex would add an uncovered edge to the vertex cover (breaking the cover)
+     * A vertex has an uncovered edge if one it's edges are NOT in the cover (ie, this is the only vertex holding that edge so we need to keep it in the cover).
+     * @param g     Graph the vertex cover is based on
+     * @param cover Current state of the cover
+     * @param vertex    Vertex to determine if it would add an uncovered edge
+     * @return          Boolean representing if or if not this vertex would add an uncovered edge.
      */
     public static boolean wouldAddUncoveredEdge(Graph g, boolean[] cover, int vertex) {
         ArrayList<ArrayList<Integer>> adjList = g.getAdjList();
@@ -153,18 +173,26 @@ public class findVCover {
         return edgeCovered;
     }
 
+    /**
+     * Sets up the initial states and finds the k cover by calling the recursive function. 
+     * 
+     * @param g     Graph that cover is based on
+     * @param k     Desired k-cover size
+     * @return  Array List with the vertices that are in the cover
+     */
     public ArrayList<Integer> findKvertexCover(Graph g, int k) {
         minCover = new boolean[g.getNumVertices()];
         boolean[] cover = new boolean[g.getNumVertices()];
         minCoverSize = g.getNumVertices();
         Arrays.fill(minCover, true);
         
+        /* setting up the initial covers */
         for(int i=0;i<cover.length;i++){
             Arrays.fill(cover, true);
             findKvertexCoverRecursive(g, cover, i, k);
         }
     
-
+        /* converting the min cover to an array list so we can print it */
         ArrayList<Integer> arrayListCover = new ArrayList<>();
         for (int i = 0; i < minCover.length; i++) {
             if (minCover[i]) {

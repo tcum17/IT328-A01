@@ -132,7 +132,7 @@ public class findClique {
         }
         complement.generateAdjList();
         // Use complement graph to find minimum Vertex Cover
-        ArrayList<Integer> minCover = cover.findMinimumVertexCover(complement);
+        ArrayList<Integer> minCover = cover.findMinVertexCover(complement);
         this.maxClique = new ArrayList<Integer>();
         // Uses set difference V - VC (set) to find Clique
         // Based off following equation: Vertex Cover = V - V' where V' is set of
@@ -171,8 +171,7 @@ public class findClique {
         }
         complement.generateAdjList();
         // Creates new VertexCover object for calling findKvertexCover
-        VertexCover vc = new VertexCover(complement);
-        ArrayList<Integer> resultVC = cover.findKvertexCover(vc, u);
+        ArrayList<Integer> resultVC = cover.findKvertexCover(complement,u);
         ArrayList<Integer> resultC = new ArrayList<>();
 
         // Uses set difference V - VC (set) to find Clique
