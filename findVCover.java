@@ -44,7 +44,6 @@ public class findVCover {
      * @return Boolean reflecting if could be opened and fileFormatted correctly
      */
     public static ArrayList<Graph> readFile(String inputFileName) {
-        // this.fileName = inputFileName;
         Path path = Paths.get(inputFileName);
         ArrayList<Graph> graphs = new ArrayList<>();
         try (BufferedReader reader = Files.newBufferedReader(path)) {
