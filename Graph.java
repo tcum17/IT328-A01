@@ -17,6 +17,8 @@ public class Graph{
     public int getNumEdges(){ return numEdges;}
     public boolean[][] getAdjMatrix(){ return adjMatrix;}
     public ArrayList<ArrayList<Integer>> getAdjList(){ return adjList;}
+    public void setAdjMatrix(boolean[][] newAdjMatrix){ this.adjMatrix = newAdjMatrix;}
+
     public Graph(int numVertices){
         this.numVertices = numVertices;
         this.numEdges = 0;

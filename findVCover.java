@@ -102,14 +102,47 @@ public class findVCover {
         boolean[] cover = new boolean[g.getNumVertices()];
         minCoverSize = g.getNumVertices();
         Arrays.fill(minCover, true);
-        
+        boolean[] initialCover = new boolean[g.getNumVertices()];
+        boolean[][] adjMatrix = g.getAdjMatrix();
+        for(int i=0;i<adjMatrix.length;i++){
+            initialCover[i] = g.getAdjList().get(i).size() > 0;
+        }
+        // System.out.print("[");
+        // for(int i=0;i<initialCover.length-1;i++){
+        //     System.out.print(initialCover[i] + ",");
+        // }
+        // if(initialCover.length == 0){
+        //     System.out.println("}");
+        // }
+        // else{
+        //     System.out.println(initialCover[initialCover.length-1] + "]");
+        // }
         /* setting up the initial states */
         for(int i=0;i<cover.length;i++){
-            Arrays.fill(cover, true);
+            cover = initialCover.clone();
             findMinVertexCoverRecursive(g, cover, i);
+            int size = getCoverSize(cover);
+            if (size < minCoverSize) {
+                minCoverSize = size;
+                minCover = cover.clone();
+            }
         }
-    
 
+        /* weird edge case, if something is in the vertex cover and it's only edge is something else in the VC
+         * only occurs when we're finding the compliment and trying to find clique
+         * 
+        */
+        for(int i=0;i<cover.length;i++){
+            if(minCover[i]){
+                ArrayList<Integer> edges = g.getAdjList().get(i);
+                if(edges.size() == 1 && minCover[edges.get(0)]){
+                    minCover[edges.get(0)] = false;
+                }
+            }
+        }
+        if(minCover.length > 0){
+            minCover[minCover.length-1] = wouldAddUncoveredEdge(g, minCover, minCover.length-1);
+        }
         /* setting up the array list for our output */
         ArrayList<Integer> arrayListCover = new ArrayList<>();
         for (int i = 0; i < minCover.length; i++) {
@@ -164,6 +197,9 @@ public class findVCover {
         ArrayList<ArrayList<Integer>> adjList = g.getAdjList();
         ArrayList<Integer> edges = adjList.get(vertex);
         boolean edgeCovered = false;
+        if(edges.size() == 0){
+            return false;
+        }
         for (int otherVertex : edges) {
             if (!cover[otherVertex]) {
                 edgeCovered = true;
@@ -269,7 +305,7 @@ public class findVCover {
      * 
      * @param vertexCover Vertex Cover to print
      */
-    private static void printVertexCover(ArrayList<Integer> vertexCover) {
+    public static void printVertexCover(ArrayList<Integer> vertexCover) {
         System.out.print("{");
         for (int j = 0; j < vertexCover.size() - 1; j++) {
             System.out.print(vertexCover.get(j) + ", ");

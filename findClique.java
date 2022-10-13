@@ -32,7 +32,7 @@ public class findClique {
         String fileName;
 
         if (args.length == 0) {
-            fileName = "graphs2022.txt";
+            fileName = "graph.txt";
         } else {
             fileName = args[0];
         }
@@ -120,16 +120,16 @@ public class findClique {
     public ArrayList<Integer> findMaximumClique(Graph g) {
         // Matrix of g for finding g's complement
         boolean[][] oldAdjMatrix = g.getAdjMatrix();
+        boolean[][] newAdjMatrix = new boolean[g.getNumVertices()][g.getNumVertices()];
         int numVertices = g.getNumVertices();
         Graph complement = new Graph(numVertices);
         // Constructs the g's complement graph
         for (int i = 0; i < oldAdjMatrix.length; i++) {
             for (int j = 0; j < oldAdjMatrix[i].length; j++) {
-                if (oldAdjMatrix[i][j] == false) {
-                    complement.addEdge(i, j);
-                }
+                newAdjMatrix[i][j] = !oldAdjMatrix[i][j];
             }
         }
+        complement.setAdjMatrix(newAdjMatrix);
         complement.generateAdjList();
         // Use complement graph to find minimum Vertex Cover
         ArrayList<Integer> minCover = cover.findMinVertexCover(complement);
@@ -171,7 +171,7 @@ public class findClique {
         }
         complement.generateAdjList();
         // Creates new VertexCover object for calling findKvertexCover
-        ArrayList<Integer> resultVC = cover.findKvertexCover(complement,u);
+        ArrayList<Integer> resultVC = cover.findKvertexCover(complement, u);
         ArrayList<Integer> resultC = new ArrayList<>();
 
         // Uses set difference V - VC (set) to find Clique
